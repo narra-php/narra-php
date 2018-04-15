@@ -1,0 +1,4 @@
+app/
+vendor/
+composer.lock
+composer.phar

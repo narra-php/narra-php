@@ -1,0 +1,22 @@
+{
+    "name": "narra-php/narra-php",
+    "description": "Narra PHP (Experimental)",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Marlon Buella",
+            "email": "marlon.b.buella@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "symfony/http-foundation": "3.4.x-dev"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "3.4.x-dev"
+    },
+    "autoload": {
+        "psr-4": {"NarraPhp\\": "src/narra-php/"},
+        "files": ["vendor/symfony/var-dumper/Resources/functions/dump.php"]
+    }
+}
