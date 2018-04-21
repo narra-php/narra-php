@@ -1,7 +1,7 @@
 <?php
 
-require_once "src/narra-php/Application.php";
+$autoload = require 'vendor/autoload.php';
 
-$app = new \NarraPhp\Application();
+$app = new \NarraPhp\Application($autoload);
 
 $app->run();

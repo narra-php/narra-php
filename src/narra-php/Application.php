@@ -13,14 +13,9 @@ class Application
     protected $baseRoutes;
     protected $autoload;
     
-    
-    public function run()
-    {
-        return $this->autoload()->dispatch();
-    }
-    
-    public function __construct()
-    {
+    public function __construct(
+        \Composer\Autoload\ClassLoader $autoload
+    ) {
         // Define path constants
     
         define("DS", DIRECTORY_SEPARATOR);
@@ -48,10 +43,15 @@ class Application
         $GLOBALS['themes_register'] = REGISTER_PATH . "themes.php";
         
         // call composer autoload
-        $this->autoload = require ROOT . 'vendor/autoload.php';
+        $this->autoload = $autoload;
     
         // Start session
         session_start();
+    }
+    
+    public function run()
+    {
+        return $this->autoload()->dispatch();
     }
 
     private function autoload()
@@ -63,14 +63,12 @@ class Application
         foreach($modules as $namespace => $enabled) {
             // if enabled, load module
             if($enabled) {
-                // assuming are in the correct path
                 // convention: app/modules/VendorName/ModuleName
                 $vendorName = strtok($namespace, NS);
                 $moduleName = strtok(NS);
                 $modulePath = MODULES_PATH . $vendorName . DS . $moduleName;
                 
                 if(!file_exists($modulePath)) {
-                    //die("Can't find module!");
                     throw new \Exception("Can't find module: ". $namespace);
                 }
                 
