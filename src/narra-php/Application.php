@@ -20,6 +20,7 @@ class Application
     
         define("DS", DIRECTORY_SEPARATOR);
         define("NS", '\\');
+        define("INDEX", 'index');
         
         define("ROOT", getcwd() . DS);
         
@@ -30,7 +31,9 @@ class Application
                 define("MODULE_CONTROLLER_PATH", "Controller" . NS);
                     define("MODULE_CONTROLLER_HOME_PATH", MODULE_CONTROLLER_PATH . "Home" . NS);
         //         define("MODULE_MODEL_PATH", "Model" . DS);
-        //         define("MODULE_VIEW_PATH", "views" . DS);
+                 define("MODULE_VIEW_PATH", "views" . DS);
+                    define("MODULE_VIEW_HOME_PATH", MODULE_VIEW_PATH . "home" . DS);
+                        define("MODULE_VIEW_HOME_TEMPLATES_PATH", MODULE_VIEW_HOME_PATH . "templates" . DS);
         //     define("THEMES_PATH", APP_PATH . "themes" . DS);
              define("APP_ETC_PATH", APP_PATH . "etc" . DS);
                 define("REGISTER_PATH", APP_ETC_PATH . "register" . DS);
@@ -91,6 +94,7 @@ class Application
     private function dispatch()
     {
         $requestInfo = [];
+        $template_ext = ".phtml";
         
         $request = Request::createFromGlobals();
         $requestUri = $request->getRequestUri();
@@ -105,11 +109,21 @@ class Application
             die('ADMIN'); // skip admin for the meantime
         }
         
+        $package = strtok($this->baseRoutes[$rawUrlFrags[0]], NS);
+        $module = strtok(NS);
+        
         $controllerClass = $this->baseRoutes[$rawUrlFrags[0]] . NS . MODULE_CONTROLLER_HOME_PATH . ucfirst(strtolower($rawUrlFrags[1]));
         $action = isset($rawUrlFrags[2]) ? $rawUrlFrags[2] : INDEX;
-        
+        $templatePath = MODULES_PATH . $package . DS . $module . DS . MODULE_VIEW_HOME_TEMPLATES_PATH . $rawUrlFrags[1] . DS . $action . $template_ext;
+
+        $template = new \NarraPhp\Application\View\Template($templatePath);
+
         // create new instance of the requested controller
-        $controllerObject = new $controllerClass($action,array_slice($rawUrlFrags,3));
+        $controllerObject = new $controllerClass(
+            $action,
+            array_slice($rawUrlFrags,3),
+            $template
+        );
         
         // run the requested action
         $controllerObject->run();
