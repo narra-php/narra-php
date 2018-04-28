@@ -1,6 +1,6 @@
 {
     "name": "narra-php/narra-php",
-    "description": "Narra PHP (Experimental)",
+    "description": "The Narra PHP Framework (Experimental)",
     "type": "project",
     "license": "MIT",
     "authors": [
